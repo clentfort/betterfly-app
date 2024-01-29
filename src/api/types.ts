@@ -74,12 +74,13 @@ export interface PlanItem extends ParseObject {
   exercise: ParsePointer<"Exercise", Exercise>;
   finishedSets: PlanItemSet[];
   history: PlanItemSetHistory[];
+  name?: string;
   note: string;
   openSets: PlanItemSet[];
   plan: ParsePointer<"Plan", Plan>;
   position: number;
   sets: PlanItemSet[];
-  type: string;
+  type: "TEXT" | "EXERCISE";
 }
 
 interface UserExtended extends ParseObject {

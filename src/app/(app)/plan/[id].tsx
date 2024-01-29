@@ -1,14 +1,13 @@
-import { Button, Card, List, ListItem, Text } from "@ui-kitten/components";
+import { Button, Text } from "@ui-kitten/components";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
-import { Image, View } from "react-native";
 
 import useObject from "@/api/use-object";
 import useObjects from "@/api/use-objects";
 import useUpdateObject from "@/api/use-update-object";
 import PageLayout from "@/components/page-layout";
+import PlanItems from "@/components/plan-items";
 import useAsyncStorage from "@/hooks/use-async-storage";
-import { space } from "@/styles";
 
 export default function PlanScreen() {
   const planId = useLocalSearchParams<{ id: string }>().id!;
@@ -60,52 +59,7 @@ export default function PlanScreen() {
   return (
     <PageLayout>
       <Text category="h3">{plan.name}</Text>
-      <List
-        data={planItems.results}
-        style={{
-          backgroundColor: "transparent",
-        }}
-        renderItem={({ item }) => (
-          <ListItem key={item.objectId}>
-            <Card style={{ width: "100%" }}>
-              <View style={{ flexDirection: "row", gap: space[4] }}>
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    padding: space[1],
-                    borderRadius: space[2],
-                  }}
-                >
-                  <Image
-                    style={{ width: 90, height: 60 }}
-                    source={{ uri: item.exercise.defaultImageUrl }}
-                  />
-                </View>
-                <View
-                  style={{
-                    flexGrow: 1,
-                    gap: space[2],
-                  }}
-                >
-                  <View style={{ flex: 1, flexDirection: "row" }}>
-                    <Text
-                      style={{
-                        fontWeight: "bold",
-                        flex: 1,
-                        fontSize: 16,
-                        lineHeight: 18,
-                      }}
-                    >
-                      {item.exercise.name}
-                    </Text>
-                  </View>
-                  <Text style={{ flex: 1 }}>0 / {item.sets.length} Sets</Text>
-                </View>
-              </View>
-            </Card>
-          </ListItem>
-        )}
-      />
+      <PlanItems items={planItems.results} />
       <Button onPress={handlePlanStart}>Training starten</Button>
     </PageLayout>
   );

@@ -72,10 +72,8 @@ const DEFAULT_PAUSE_DURATION = 60 + 40;
 
 export default function ExercisePlanScreen() {
   const planItemId = useLocalSearchParams<{ id: string }>().id!;
-  const [pauseDuration, setPauseDuration] = useState(20);
-  const [pauseStartedAt, setPauseStartedAt] = useState<null | number>(
-    Date.now(),
-  );
+  const [pauseDuration, setPauseDuration] = useState(0);
+  const [pauseStartedAt, setPauseStartedAt] = useState<null | number>(null);
   const [nextPauseDuration, setNextPauseDuration] = useAsyncStorage(
     "pause-duration",
     DEFAULT_PAUSE_DURATION,
