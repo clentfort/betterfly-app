@@ -1,6 +1,6 @@
 # Betterfly App
 
-Better Butterfly Members App
+Trainings plan app that talks to a Parse SDK server. See [types in `src/api/types.ts`](src/api/types.ts) for the data model.
 
 ## Environment
 
