@@ -41,12 +41,15 @@ export default function PlanScreen() {
       .map((item) => item.objectId),
   );
 
-  const handleAbortSession = async () => {
+  const finishSession = async () => {
     try {
       await endPlan({
         objectId: plan.objectId,
         isRunning: false,
-        ratings: [...plan.ratings, { feedback: "easy", date: planStartedAt }],
+        ratings: [
+          ...plan.ratings,
+          { feedback: "easy", date: `${planStartedAt}T00:00:01.000` },
+        ],
       });
     } catch (error) {
       console.error(error);
@@ -59,10 +62,10 @@ export default function PlanScreen() {
       Alert.alert(
         "Training beenden?",
         `Du hast erst ${done.size} von ${planItems.results.length} Übungen absolviert. Training wirklich beenden?`,
-        [{ text: "Nein" }, { text: "Ja", onPress: handleAbortSession }],
+        [{ text: "Nein" }, { text: "Ja", onPress: finishSession }],
       );
     } else {
-      handleAbortSession();
+      finishSession();
     }
   };
 

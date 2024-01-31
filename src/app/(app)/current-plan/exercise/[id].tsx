@@ -121,6 +121,7 @@ export default function ExercisePlanScreen() {
         data: {
           url: `/current-plan/exercise/${planItemId}`,
         },
+        priority: Notifications.AndroidNotificationPriority.MAX,
       },
       trigger: { seconds: pauseDuration },
     });
@@ -133,23 +134,22 @@ export default function ExercisePlanScreen() {
 
   //////////////////////////////
   const appState = useAppState();
-  const prevAppState = useRef(appState);
+  const prevAppStateRef = useRef(appState);
   useEffect(() => {
-    if (prevAppState.current !== appState && appState === "active") {
-      prevAppState.current = appState;
-      if (pauseDuration === 0) {
-        return;
-      }
-      // App has become active
-      const now = Date.now();
-      const secondsSincePauseStarted = Math.round(
-        (now - pauseStartedAt) / 1000,
-      );
-
-      setPause(Math.max(0, pauseDuration - secondsSincePauseStarted));
+    const prevAppState = prevAppStateRef.current;
+    prevAppStateRef.current = appState;
+    if (prevAppState === appState || appState !== "active") {
       return;
     }
-    prevAppState.current = appState;
+    // App has become active
+
+    if (pauseDuration === 0) {
+      return;
+    }
+    const now = Date.now();
+    const secondsSincePauseStarted = Math.round((now - pauseStartedAt) / 1000);
+
+    setPause(Math.max(0, pauseDuration - secondsSincePauseStarted));
   }, [appState, pauseDuration, pauseStartedAt, setPause]);
   //////////////////////////////
 
