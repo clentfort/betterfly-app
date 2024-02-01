@@ -11,7 +11,7 @@ import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ParseClientProvider } from "@/api/parse-client-context";
-import { DataProvider } from "@/contexts/session-context";
+import { SessionProvider } from "@/contexts/session-context";
 import Client from "@/parse-client";
 
 export const parseClient = new Client(
@@ -101,9 +101,9 @@ export default () => {
         <ApplicationProvider {...eva} theme={eva.dark}>
           <QueryClientProvider client={queryClient}>
             <ParseClientProvider client={parseClient}>
-              <DataProvider>
+              <SessionProvider>
                 <Slot />
-              </DataProvider>
+              </SessionProvider>
             </ParseClientProvider>
           </QueryClientProvider>
         </ApplicationProvider>

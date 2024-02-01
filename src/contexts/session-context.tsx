@@ -12,7 +12,7 @@ interface LoginParams {
 }
 
 const SessionContext = createContext({
-  async login(_: LoginParams): Promise<void> {},
+  async login(credentials: LoginParams): Promise<void> {},
   logout(): void {},
   isLoggedIn: false,
 });
@@ -24,7 +24,7 @@ function getServerUrl(studioId: string) {
   );
 }
 
-export function DataProvider({ children }) {
+export function SessionProvider({ children }) {
   const [sessionToken, setSessionToken] = useStorageState<string | null>(
     "session-token",
     null,

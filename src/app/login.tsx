@@ -1,6 +1,5 @@
 import { Button, Input, Text } from "@ui-kitten/components";
 import { router } from "expo-router";
-import React from "react";
 
 import PageLayout from "@/components/page-layout";
 import PasswordInput from "@/components/password-input";
@@ -25,16 +24,24 @@ export default function HomeScreen(): React.ReactElement {
       }}
     >
       <Text category="h1">Betterfly Member App</Text>
-      <Input label="Studio ID" value={studioId} onChangeText={setStudioId} />
       <Input
+        keyboardType="numeric"
+        label="Studio ID"
+        defaultValue={studioId}
+        onChangeText={setStudioId}
+      />
+      <Input
+        autoComplete="email"
         label="E-Mail"
-        value={username}
+        keyboardType="email-address"
+        textContentType="emailAddress"
+        defaultValue={username}
         onChangeText={setUsername}
-        textContentType="username"
       />
       <PasswordInput
+        autoComplete="password"
         label="Password"
-        value={password}
+        defaultValue={password}
         onChangeText={setPassword}
       />
       <Button
