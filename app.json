@@ -24,7 +24,8 @@
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#222b45"
       },
-      "package": "com.clentfort.betterflyapp"
+      "package": "com.clentfort.betterflyapp",
+      "permissions": ["android.permission.SCHEDULE_EXACT_ALARM"]
     },
     "web": {
       "favicon": "./assets/logo.png"

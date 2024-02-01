@@ -48,7 +48,7 @@ export default function PlanScreen() {
         isRunning: false,
         ratings: [
           ...plan.ratings,
-          { feedback: "easy", date: `${planStartedAt}T00:00:01.000` },
+          { feedback: "easy", date: `${planStartedAt}T23:59:59.000` },
         ],
       });
     } catch (error) {
