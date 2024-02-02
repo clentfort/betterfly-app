@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   PlanItemSet,
   PlanItemSetHistory,
+  PlanItemTimeSet,
   PlanItemWeightSet,
 } from "@/api/types";
 import CountUp from "@/components/count-up";
@@ -213,11 +214,40 @@ export default function ExercisePlanScreen() {
     updatePlanItem({ objectId: planItemId, finishedSets, history });
   };
 
-  const handleEndCountUp = () => {
+  const handleEndCountUp = async () => {
     const now = Date.now();
     const duration = Math.round((now - timerStartedAt!) / 1000);
     setTimerStartedAt(-1);
-    handleEditCurrentSet({ type: "TIME", time: duration });
+
+    const set: PlanItemTimeSet = { type: "TIME", time: duration };
+
+    const sets = [...planItem.sets];
+    sets[planItem.currentSetIndex ?? 0] = set;
+
+    const currentSetIndex = planItem.currentSetIndex ?? 0 + 1;
+    const [, ...openSets] = planItem.openSets;
+    const finishedSets = [...planItem.finishedSets, set];
+    const history = upsertSetsInHistory(
+      planItem.history ?? [],
+      finishedSets,
+      planStartedAt,
+    );
+
+    await updatePlanItem({
+      objectId: planItemId,
+      currentSetIndex,
+      finishedSets,
+      history,
+      openSets,
+      sets,
+    });
+
+    if (planItem.openSets.length > 1) {
+      setPause(nextPauseDuration);
+    }
+    if (planItem.openSets.length <= 1) {
+      router.push(`/current-plan/${planItem.plan.objectId}`);
+    }
   };
 
   const lastSession = (planItem.history ?? []).findLast(
