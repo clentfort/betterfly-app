@@ -1,22 +1,63 @@
 import { Icon, Input, Layout, Text } from "@ui-kitten/components";
 
-import { PlanItemSet, PlanItemTimeSet, PlanItemWeightSet } from "@/api/types";
+import { isPlanItemSetOfType } from "@/api/is-plan-item-set-of-type";
+import {
+  PlanItemRepetitionsSet,
+  PlanItemSet,
+  PlanItemTimeSet,
+  PlanItemWeightSet,
+} from "@/api/types";
 import { space } from "@/styles";
 
-interface ExerciseSetProps<T> {
-  set: T;
-  stepSize?: number;
-  onSetChange: (set: T) => void;
+interface ExerciseSetProps {
+  set: PlanItemSet;
+  stepSize: number;
+  onSetChange: (set: PlanItemSet) => void;
 }
 
-export function ExerciseSet<T extends PlanItemSet>(props: ExerciseSetProps<T>) {
-  if (props.set.type === "TIME") {
-    // @ts-ignore
-    return <TimeSet {...props} />;
-  } else {
-    // @ts-ignore
-    return <WeightSet {...props} />;
+export function ExerciseSet(props: ExerciseSetProps) {
+  if (isPlanItemSetOfType("REPETITIONS", props.set)) {
+    return <RepetitionsSet {...props} set={props.set} />;
+  } else if (isPlanItemSetOfType("TIME", props.set)) {
+    return <TimeSet {...props} set={props.set} />;
+  } else if (isPlanItemSetOfType("WEIGHT", props.set)) {
+    return <WeightSet {...props} set={props.set} />;
   }
+  return null;
+}
+
+interface PlanItemRepetitionsSetProps {
+  set: PlanItemRepetitionsSet;
+  stepSize: number;
+  onSetChange: (set: PlanItemRepetitionsSet) => void;
+}
+
+function RepetitionsSet({ set, onSetChange }: PlanItemRepetitionsSetProps) {
+  return (
+    <Layout
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: space[3],
+      }}
+    >
+      <Text style={{ opacity: 0, fontSize: 24 }}>WDH</Text>
+      <ValueControls
+        defaultValue={set.repetitions ?? 0}
+        onIncrease={() =>
+          onSetChange({ ...set, repetitions: set.repetitions + 1 })
+        }
+        onDecrease={() =>
+          onSetChange({ ...set, repetitions: set.repetitions - 1 })
+        }
+        onSet={(repetitions) =>
+          onSetChange({ ...set, repetitions: Math.round(repetitions) })
+        }
+      />
+      <Text style={{ fontSize: 24 }}>WDH</Text>
+    </Layout>
+  );
 }
 
 interface PlanItemTimeSetProps {

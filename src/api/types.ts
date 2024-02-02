@@ -5,13 +5,14 @@ import {
   ParsePointer,
 } from "@/parse-client";
 
+export type ExerciseType = "TIME" | "WEIGHT" | "REPETITIONS";
 export interface Category extends ParseObject {}
 export interface Equipment extends ParseObject {}
 export interface Muscle extends ParseObject {}
 export interface Exercise extends ParseObject {
   number: string;
   name: string;
-  type: string;
+  type: ExerciseType;
   strength: unknown;
   defaultImageUrl: string;
   defaultVideoUrl: string;
@@ -61,7 +62,15 @@ export interface PlanItemWeightSet {
   repetitions: number;
 }
 
-export type PlanItemSet = PlanItemTimeSet | PlanItemWeightSet;
+export interface PlanItemRepetitionsSet {
+  type: "REPETITIONS";
+  repetitions: number;
+}
+
+export type PlanItemSet =
+  | PlanItemRepetitionsSet
+  | PlanItemTimeSet
+  | PlanItemWeightSet;
 
 export type PlanItemSetHistory = {
   /** Date as YYYY-MM-DD */

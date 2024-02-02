@@ -4,7 +4,7 @@ import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
-import { router, Slot } from "expo-router";
+import { Slot, router } from "expo-router";
 import * as SecureStorage from "expo-secure-store";
 import React, { useEffect } from "react";
 import { Platform } from "react-native";
