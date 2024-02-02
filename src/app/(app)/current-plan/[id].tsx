@@ -4,12 +4,12 @@ import React from "react";
 import { Alert } from "react-native";
 
 import { PlanItem } from "@/api/types";
-import useObject from "@/api/use-object";
-import useObjects from "@/api/use-objects";
-import useUpdateObject from "@/api/use-update-object";
 import PageLayout from "@/components/page-layout";
 import PlanItems from "@/components/plan-items";
 import useAsyncStorage from "@/hooks/use-async-storage";
+import useObject from "@/parse-react/use-object";
+import useObjects from "@/parse-react/use-objects";
+import useUpdateObject from "@/parse-react/use-update-object";
 
 export default function PlanScreen() {
   const planId = useLocalSearchParams<{ id: string }>().id!;

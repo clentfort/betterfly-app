@@ -1,9 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
 import React, { createContext, useContext, useEffect } from "react";
 
-import useLogin from "@/api/use-login";
-import useParseClient from "@/api/use-parse-client";
 import { useStorageState } from "@/hooks/use-secure-storage";
+import useLogin from "@/parse-react/use-login";
+import useParseClient from "@/parse-react/use-parse-client";
 
 interface LoginParams {
   studioId: string;

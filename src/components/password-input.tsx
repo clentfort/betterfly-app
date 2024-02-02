@@ -1,7 +1,6 @@
 import { Icon, Input } from "@ui-kitten/components";
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
-import { ImageProps } from "react-native-svg";
 
 interface SecureEntryToggleProps {
   isSecureEntryOn: boolean;

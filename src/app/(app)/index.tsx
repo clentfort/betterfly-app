@@ -1,8 +1,8 @@
 import { List, ListItem, Text } from "@ui-kitten/components";
 import { Redirect, router } from "expo-router";
 
-import useObjects from "@/api/use-objects";
 import PageLayout from "@/components/page-layout";
+import useObjects from "@/parse-react/use-objects";
 import { space } from "@/styles";
 
 function today() {

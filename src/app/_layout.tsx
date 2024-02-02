@@ -10,9 +10,9 @@ import React, { useEffect } from "react";
 import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-import { ParseClientProvider } from "@/api/parse-client-context";
 import { SessionProvider } from "@/contexts/session-context";
 import Client from "@/parse-client";
+import { ParseClientProvider } from "@/parse-react/parse-client-context";
 
 export const parseClient = new Client(
   process.env.EXPO_PUBLIC_PARSE_APPLICATION_ID,

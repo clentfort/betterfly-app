@@ -15,8 +15,6 @@ import {
   PlanItemSetHistory,
   PlanItemWeightSet,
 } from "@/api/types";
-import useObject from "@/api/use-object";
-import useUpdateObject from "@/api/use-update-object";
 import CountUp from "@/components/count-up";
 import ExercisePlanTable from "@/components/exercise-plan-table";
 import { ExerciseSet } from "@/components/exercise-set";
@@ -24,6 +22,8 @@ import PageLayout from "@/components/page-layout";
 import Timer from "@/components/timer";
 import useAppState from "@/hooks/use-app-state";
 import useAsyncStorage from "@/hooks/use-async-storage";
+import useObject from "@/parse-react/use-object";
+import useUpdateObject from "@/parse-react/use-update-object";
 import { space } from "@/styles";
 
 function upsertSetsInHistory(
