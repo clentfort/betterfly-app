@@ -47,7 +47,7 @@ export default function PlanScreen() {
         objectId: plan.objectId,
         isRunning: false,
         ratings: [
-          ...plan.ratings,
+          ...(plan.ratings ?? []),
           { feedback: "easy", date: `${planStartedAt}T23:59:59.000` },
         ],
       });

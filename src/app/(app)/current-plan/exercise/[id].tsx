@@ -45,7 +45,7 @@ function upsertSetsInHistory(
 function isHistoryOfWeightSets(
   history: PlanItemSetHistory[],
 ): history is { date: string; sets: PlanItemWeightSet[] }[] {
-  return history.length > 0 && history[0].sets[0].type === "WEIGHT";
+  return history.length > 0 && history[0]?.sets[0]?.type === "WEIGHT";
 }
 
 function findStepSize(history: { sets: PlanItemWeightSet[] }[]) {
@@ -62,6 +62,8 @@ function findStepSize(history: { sets: PlanItemWeightSet[] }[]) {
     if (index === 0) {
       return 0;
     }
+    // @ts-expect-error We have a special case for index === 0 above, afterwarts
+    // we can be sure that index - 1 is not undefined
     return weight - weights[index - 1];
   });
 
@@ -73,7 +75,7 @@ const DEFAULT_PAUSE_DURATION = 60 + 40;
 export default function ExercisePlanScreen() {
   const planItemId = useLocalSearchParams<{ id: string }>().id!;
   const [pauseDuration, setPauseDuration] = useState(0);
-  const [pauseStartedAt, setPauseStartedAt] = useState<null | number>(null);
+  const [pauseStartedAt, setPauseStartedAt] = useState(0);
   const [nextPauseDuration, setNextPauseDuration] = useAsyncStorage(
     "pause-duration",
     DEFAULT_PAUSE_DURATION,
@@ -94,12 +96,12 @@ export default function ExercisePlanScreen() {
     "",
   );
   const { mutateAsync: updatePlanItem } = useUpdateObject("PlanItem");
-  const [timerStartedAt, setTimerStartedAt] = useState(null);
+  const [timerStartedAt, setTimerStartedAt] = useState(-1);
 
   const setPause = useCallback((pause: number) => {
     setPauseDuration(pause);
     if (pause === 0) {
-      setPauseStartedAt(null);
+      setPauseStartedAt(0);
     } else {
       setPauseStartedAt(Date.now());
     }
@@ -163,11 +165,11 @@ export default function ExercisePlanScreen() {
 
   const handleFinishSet = async () => {
     if (planItem.openSets.length > 0) {
-      const currentSetIndex = planItem.currentSetIndex + 1;
+      const currentSetIndex = planItem.currentSetIndex ?? 0 + 1;
       const [finishedSet, ...openSets] = planItem.openSets;
-      const finishedSets = [...planItem.finishedSets, finishedSet];
+      const finishedSets = [...planItem.finishedSets, finishedSet!];
       const history = upsertSetsInHistory(
-        planItem.history,
+        planItem.history ?? [],
         finishedSets,
         planStartedAt,
       );
@@ -193,7 +195,7 @@ export default function ExercisePlanScreen() {
     const openSets = [set, ...remainingOpenSets];
 
     const sets = [...planItem.sets];
-    sets[planItem.currentSetIndex] = set;
+    sets[planItem.currentSetIndex ?? 0] = set;
 
     updatePlanItem({ objectId: planItemId, openSets, sets });
   };
@@ -203,7 +205,7 @@ export default function ExercisePlanScreen() {
     finishedSets[finishedItemToEdit!] = set;
 
     const history = upsertSetsInHistory(
-      planItem.history,
+      planItem.history ?? [],
       finishedSets,
       planStartedAt,
     );
@@ -213,19 +215,23 @@ export default function ExercisePlanScreen() {
 
   const handleEndCountUp = () => {
     const now = Date.now();
-    const duration = Math.round((now - timerStartedAt) / 1000);
-    setTimerStartedAt(null);
+    const duration = Math.round((now - timerStartedAt!) / 1000);
+    setTimerStartedAt(-1);
     handleEditCurrentSet({ type: "TIME", time: duration });
   };
 
-  const lastSession = planItem.history.findLast(
+  const lastSession = (planItem.history ?? []).findLast(
     ({ date, sets }) =>
       date < new Date().toISOString().substring(0, 10) && sets.length > 0,
   );
 
   let stepSize = 1;
-  if (isHistoryOfWeightSets(planItem.history)) {
-    stepSize = findStepSize(planItem.history);
+  if (
+    planItem.history &&
+    planItem.history.length > 0 &&
+    isHistoryOfWeightSets(planItem.history)
+  ) {
+    stepSize = findStepSize(planItem.history!);
   }
 
   if (planStartedAt === null) {
@@ -247,7 +253,7 @@ export default function ExercisePlanScreen() {
       >
         <Card>
           <ExerciseSet
-            set={planItem.finishedSets[finishedItemToEdit!]}
+            set={planItem.finishedSets[finishedItemToEdit!]!}
             onSetChange={handleEditFinishedSet}
             stepSize={stepSize}
           />
@@ -269,7 +275,7 @@ export default function ExercisePlanScreen() {
       </Modal>
       <Modal
         visible={
-          timerStartedAt != null &&
+          timerStartedAt > 0 &&
           planItem.openSets.length > 0 &&
           planItem.openSets[0]?.type === "TIME"
         }
@@ -289,17 +295,19 @@ export default function ExercisePlanScreen() {
       </Modal>
       <Text category="h3">{planItem.exercise.name}</Text>
 
-      <Layout>
-        <Text category="label">Letztes Training ({lastSession.date})</Text>
-        <Card
-          style={{ width: "100%" }}
-          onLayout={(event) =>
-            setCurrentTrainingHeight(event.nativeEvent.layout.height)
-          }
-        >
-          {lastSession && <ExercisePlanTable sets={lastSession.sets} />}
-        </Card>
-      </Layout>
+      {lastSession && (
+        <Layout>
+          <Text category="label">Letztes Training ({lastSession.date})</Text>
+          <Card
+            style={{ width: "100%" }}
+            onLayout={(event) =>
+              setCurrentTrainingHeight(event.nativeEvent.layout.height)
+            }
+          >
+            {lastSession && <ExercisePlanTable sets={lastSession.sets} />}
+          </Card>
+        </Layout>
+      )}
 
       <Layout style={{ flexGrow: 1, justifyContent: "center" }}>
         <Text category="label">Aktueller Satz</Text>
@@ -307,7 +315,7 @@ export default function ExercisePlanScreen() {
           {planItem.openSets.length > 0 && (
             <ExerciseSet
               stepSize={stepSize}
-              set={planItem.openSets[0]}
+              set={planItem.openSets[0]!}
               onSetChange={handleEditCurrentSet}
             />
           )}

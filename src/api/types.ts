@@ -73,7 +73,7 @@ export interface PlanItem extends ParseObject {
   currentSetIndex: null | number;
   exercise: ParsePointer<"Exercise", Exercise>;
   finishedSets: PlanItemSet[];
-  history: PlanItemSetHistory[];
+  history?: PlanItemSetHistory[];
   name?: string;
   note: string;
   openSets: PlanItemSet[];

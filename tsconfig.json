@@ -1,11 +1,25 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "alwaysStrict": true,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
     },
     "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types", "./typings"],
   },
   "include": ["**/*.ts", "**/*.tsx"],
 }

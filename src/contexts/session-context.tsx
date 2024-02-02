@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 
 import useLogin from "@/api/use-login";
 import useParseClient from "@/api/use-parse-client";
@@ -24,7 +24,7 @@ function getServerUrl(studioId: string) {
   );
 }
 
-export function SessionProvider({ children }) {
+export function SessionProvider({ children }: React.PropsWithChildren<object>) {
   const [sessionToken, setSessionToken] = useStorageState<string | null>(
     "session-token",
     null,

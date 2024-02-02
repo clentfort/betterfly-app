@@ -21,8 +21,8 @@ export const parseClient = new Client(
 export const queryClient = new QueryClient();
 // TODO: Find a better way to do this
 try {
-  const sessionToken = JSON.parse(SecureStorage.getItem("session-token"));
-  const studioId = JSON.parse(SecureStorage.getItem("login-studio-id"));
+  const sessionToken = JSON.parse(SecureStorage.getItem("session-token")!);
+  const studioId = JSON.parse(SecureStorage.getItem("login-studio-id")!);
   parseClient.setBaseUrl(
     process.env.EXPO_PUBLIC_PARSE_SERVER_URL.replace("${studioId}", studioId),
   );
@@ -43,7 +43,7 @@ function useNotificationObserver() {
     let isMounted = true;
 
     function redirect(notification: Notifications.Notification) {
-      const url = notification.request.content.data?.url;
+      const url = notification.request.content.data?.["url"];
       if (url) {
         setTimeout(() => router.push(url), 1);
       }

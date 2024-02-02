@@ -8,13 +8,13 @@ import { space } from "@/styles";
 function areAllSetsWeightSets(
   sets: (PlanItemWeightSet | PlanItemTimeSet)[],
 ): sets is PlanItemWeightSet[] {
-  return sets.length > 0 && sets[0].type === "WEIGHT";
+  return sets.length > 0 && sets[0]!.type === "WEIGHT";
 }
 
 function areAllTimeSets(
   sets: (PlanItemWeightSet | PlanItemTimeSet)[],
 ): sets is PlanItemTimeSet[] {
-  return sets.length > 0 && sets[0].type === "TIME";
+  return sets.length > 0 && sets[0]!.type === "TIME";
 }
 
 interface ExercisePlanTableProps {
@@ -36,7 +36,7 @@ export default function ExercisePlanTable({
 
 interface WeightExercisePlanTableProps {
   sets: PlanItemWeightSet[];
-  onRowPress?: (index: number) => void;
+  onRowPress?: ((index: number) => void) | undefined;
 }
 function WeightExercisePlanTable({
   sets,
@@ -85,7 +85,7 @@ function WeightExercisePlanTable({
 
 interface TimeExercisePlanTableProps {
   sets: PlanItemTimeSet[];
-  onRowPress?: (index: number) => void;
+  onRowPress?: ((index: number) => void) | undefined;
 }
 function TimeExercisePlanTable({
   sets,

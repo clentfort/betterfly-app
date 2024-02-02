@@ -35,8 +35,8 @@ export default function PlanScreen() {
   async function handlePlanStart() {
     try {
       await Promise.all([
-        startPlan({ objectId: plan.objectId, isRunning: true }),
-        ...planItems.results.map((item) =>
+        startPlan({ objectId: planId, isRunning: true }),
+        ...(planItems?.results ?? []).map((item) =>
           resetPlanItem({
             objectId: item.objectId,
             currentSetIndex: 0,

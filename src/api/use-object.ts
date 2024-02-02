@@ -11,7 +11,7 @@ import {
 export default function useObject<
   T extends ParseClasses,
   I extends PointerPath<PointerTypeToClassMap[T]> = never,
->(classname: T, objectId: string, include?: I[]) {
+>(classname: T, objectId: string, include: I[] = []) {
   const parseClient = useParseClient();
 
   return useQuery({

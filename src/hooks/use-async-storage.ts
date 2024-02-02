@@ -13,7 +13,7 @@ export default function useAsyncStorage<T>(key: string, initialState: T) {
   }, [key]);
 
   const setStateWrapped = useCallback(
-    (value) => {
+    (value: T) => {
       setState(value);
       AsyncStorage.setItem(key, JSON.stringify(value));
     },

@@ -33,7 +33,7 @@ export default function PlanItems({ items, onItemPress }: PlanItemsProps) {
             {item.type === "EXERCISE" ? (
               <PlanItem item={item} onPress={onItemPress} />
             ) : (
-              <Text category="label">{item.name}</Text>
+              <Text category="label">{item.name!}</Text>
             )}
           </ListItem>
         );
@@ -44,7 +44,7 @@ export default function PlanItems({ items, onItemPress }: PlanItemsProps) {
 
 interface PlanItemProps {
   item: PartiallyResolvedPointer<PlanItemType, "exercise">;
-  onPress?: (item: PlanItemType) => void;
+  onPress?: ((item: PlanItemType) => void) | undefined;
 }
 
 function PlanItem({ item, onPress }: PlanItemProps) {

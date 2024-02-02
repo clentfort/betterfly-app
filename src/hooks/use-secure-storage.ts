@@ -12,14 +12,14 @@ export async function setStorageItemAsync(key: string, value: any | null) {
 export function useStorageState<T>(key: string, initialState: T) {
   const [state, setState] = React.useState<T>(() => {
     try {
-      return JSON.parse(SecureStore.getItem(key));
+      return JSON.parse(SecureStore.getItem(key)!);
     } catch {
       return initialState;
     }
   });
 
   const wrappedSetState = React.useCallback(
-    (value: T | null) => {
+    (value: T) => {
       setState(value);
       setStorageItemAsync(key, JSON.stringify(value));
     },

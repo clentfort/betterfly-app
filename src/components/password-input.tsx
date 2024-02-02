@@ -3,18 +3,17 @@ import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { ImageProps } from "react-native-svg";
 
-interface SecureEntryToggleProps extends Partial<ImageProps> {
+interface SecureEntryToggleProps {
   isSecureEntryOn: boolean;
   onToggleSecureEntry: () => void;
 }
 function SecureEntryToggle({
   isSecureEntryOn,
   onToggleSecureEntry,
-  ...props
 }: SecureEntryToggleProps): React.ReactElement {
   return (
     <TouchableWithoutFeedback onPress={onToggleSecureEntry}>
-      <Icon {...props} name={isSecureEntryOn ? "eye-off" : "eye"} />
+      <Icon name={isSecureEntryOn ? "eye-off" : "eye"} />
     </TouchableWithoutFeedback>
   );
 }
@@ -38,7 +37,6 @@ export default function PasswordInput(
       {...props}
       accessoryRight={(props) => (
         <SecureEntryToggle
-          {...props}
           isSecureEntryOn={secureTextEntry}
           onToggleSecureEntry={toggleSecureEntry}
         />

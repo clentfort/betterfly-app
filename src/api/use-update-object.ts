@@ -30,7 +30,12 @@ export default function useUpdateObject<T extends ParseClasses>(classname: T) {
       ]);
       queryClient.setQueriesData<PointerTypeToClassMap[T]>(
         { queryKey: [classname, objectId], exact: false },
-        (old) => ({ ...old, ...body }),
+        (old) => {
+          if (old == null) {
+            return;
+          }
+          return { ...old, ...body };
+        },
       );
       queryClient.setQueriesData<QueryResponse<PointerTypeToClassMap[T]>>(
         { queryKey: [`${classname}s`], exact: false },
