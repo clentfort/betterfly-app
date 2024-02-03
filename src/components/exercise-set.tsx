@@ -9,13 +9,55 @@ import {
 } from "@/api/types";
 import { space } from "@/styles";
 
+const superscripts = "⁰¹²³⁴⁵⁶⁷⁸⁹".split("");
+const subscripts = "₀₁₂₃₄₅₆₇₈₉".split("");
+
+function numberToScript(number: number, scripts: string[]) {
+  return number
+    .toString(10)
+    .split("")
+    .map((digit) => {
+      const index = 9 - ("9".charCodeAt(0) - digit.charCodeAt(0));
+      return scripts[index];
+    })
+    .join("");
+}
+
+function numbersToFraction(numerator: number, denominator: number) {
+  const numeratorAsString = numberToScript(numerator, superscripts);
+  const denominatorAsString = numberToScript(denominator, subscripts);
+  return `${numeratorAsString}\u2044${denominatorAsString}`;
+}
+
 interface ExerciseSetProps {
+  index: number;
+  total: number;
   set: PlanItemSet;
   stepSize: number;
   onSetChange: (set: PlanItemSet) => void;
 }
 
-export function ExerciseSet(props: ExerciseSetProps) {
+export function ExerciseSet({ index, total, ...props }: ExerciseSetProps) {
+  return (
+    <Layout
+      style={{
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+      }}
+    >
+      <Text style={{ fontSize: space[5], fontWeight: "bold" }}>
+        {numbersToFraction(index + 1, total)}
+      </Text>
+      <ConcreteExerciseSet {...props} />
+    </Layout>
+  );
+}
+
+function ConcreteExerciseSet(
+  props: Pick<ExerciseSetProps, "set" | "stepSize" | "onSetChange">,
+) {
   if (isPlanItemSetOfType("REPETITIONS", props.set)) {
     return <RepetitionsSet {...props} set={props.set} />;
   } else if (isPlanItemSetOfType("TIME", props.set)) {
@@ -28,7 +70,6 @@ export function ExerciseSet(props: ExerciseSetProps) {
 
 interface PlanItemRepetitionsSetProps {
   set: PlanItemRepetitionsSet;
-  stepSize: number;
   onSetChange: (set: PlanItemRepetitionsSet) => void;
 }
 
@@ -42,7 +83,7 @@ function RepetitionsSet({ set, onSetChange }: PlanItemRepetitionsSetProps) {
         gap: space[3],
       }}
     >
-      <Text style={{ opacity: 0, fontSize: 24 }}>WDH</Text>
+      <Text style={{ opacity: 0, fontSize: space[5] }}>WDH</Text>
       <ValueControls
         defaultValue={set.repetitions ?? 0}
         onIncrease={() =>
@@ -55,14 +96,13 @@ function RepetitionsSet({ set, onSetChange }: PlanItemRepetitionsSetProps) {
           onSetChange({ ...set, repetitions: Math.round(repetitions) })
         }
       />
-      <Text style={{ fontSize: 24 }}>WDH</Text>
+      <Text style={{ fontSize: space[5] }}>WDH</Text>
     </Layout>
   );
 }
 
 interface PlanItemTimeSetProps {
   set: PlanItemTimeSet;
-  stepSize: number;
   onSetChange: (set: PlanItemTimeSet) => void;
 }
 
@@ -76,14 +116,14 @@ function TimeSet({ set, onSetChange }: PlanItemTimeSetProps) {
         gap: space[3],
       }}
     >
-      <Text style={{ opacity: 0, fontSize: 24 }}>Sekunden</Text>
+      <Text style={{ opacity: 0, fontSize: space[5] }}>Sekunden</Text>
       <ValueControls
         defaultValue={set.time ?? 0}
         onIncrease={() => onSetChange({ ...set, time: set.time + 1 })}
         onDecrease={() => onSetChange({ ...set, time: set.time - 1 })}
         onSet={(time) => onSetChange({ ...set, time: Math.round(time) })}
       />
-      <Text style={{ fontSize: 24 }}>Sekunden</Text>
+      <Text style={{ fontSize: space[5] }}>Sekunden</Text>
     </Layout>
   );
 }
@@ -95,13 +135,7 @@ interface PlanItemWeightSetProps {
 }
 function WeightSet({ set, stepSize, onSetChange }: PlanItemWeightSetProps) {
   return (
-    <Layout
-      style={{
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "space-around",
-      }}
-    >
+    <>
       <Layout
         style={{
           flexDirection: "row",
@@ -109,7 +143,7 @@ function WeightSet({ set, stepSize, onSetChange }: PlanItemWeightSetProps) {
           gap: space[3],
         }}
       >
-        <Text style={{ opacity: 0, fontSize: 24 }}>KG</Text>
+        <Text style={{ opacity: 0, fontSize: space[5] }}>KG</Text>
         <ValueControls
           defaultValue={set.repetitions ?? 0}
           onIncrease={() =>
@@ -122,7 +156,7 @@ function WeightSet({ set, stepSize, onSetChange }: PlanItemWeightSetProps) {
             onSetChange({ ...set, repetitions: Math.round(repetitions) })
           }
         />
-        <Text style={{ opacity: 0, fontSize: 24 }}>KG</Text>
+        <Text style={{ opacity: 0, fontSize: space[5] }}>KG</Text>
       </Layout>
       <Layout
         style={{
@@ -131,7 +165,7 @@ function WeightSet({ set, stepSize, onSetChange }: PlanItemWeightSetProps) {
           gap: space[3],
         }}
       >
-        <Text style={{ opacity: 0, fontSize: 24 }}>KG</Text>
+        <Text style={{ opacity: 0, fontSize: space[5] }}>KG</Text>
         <ValueControls
           defaultValue={set.weight ?? 0}
           onIncrease={() =>
@@ -142,9 +176,9 @@ function WeightSet({ set, stepSize, onSetChange }: PlanItemWeightSetProps) {
           }
           onSet={(weight) => onSetChange({ ...set, weight })}
         />
-        <Text style={{ fontSize: 24 }}>KG</Text>
+        <Text style={{ fontSize: space[5] }}>KG</Text>
       </Layout>
-    </Layout>
+    </>
   );
 }
 
@@ -170,21 +204,21 @@ function ValueControls({
     >
       <Icon
         fill="white"
-        style={{ height: space[10], width: space[10] }}
+        style={{ height: space[9], width: space[9] }}
         name="chevron-up-outline"
         onPress={onIncrease}
       />
       <Input
-        style={{ width: 100 }}
+        style={{ minWidth: 96 }}
         keyboardType="decimal-pad"
         defaultValue={defaultValue.toString()}
         size="large"
-        textStyle={{ fontSize: 24, textAlign: "center" }}
+        textStyle={{ fontSize: space[5], textAlign: "center" }}
         onEndEditing={(event) => onSet(parseFloat(event.nativeEvent.text))}
       />
       <Icon
         fill="white"
-        style={{ height: space[10], width: space[10] }}
+        style={{ height: space[9], width: space[9] }}
         name="chevron-down-outline"
         onPress={onDecrease}
       />

@@ -283,7 +283,9 @@ export default function ExercisePlanScreen() {
       >
         <Card>
           <ExerciseSet
+            index={finishedItemToEdit!}
             set={planItem.finishedSets[finishedItemToEdit!]!}
+            total={planItem.sets.length}
             onSetChange={handleEditFinishedSet}
             stepSize={stepSize}
           />
@@ -344,6 +346,8 @@ export default function ExercisePlanScreen() {
         <Layout style={{ flexGrow: 1, justifyContent: "center" }}>
           {planItem.openSets.length > 0 && (
             <ExerciseSet
+              index={planItem.currentSetIndex ?? 0}
+              total={planItem.sets.length}
               stepSize={stepSize}
               set={planItem.openSets[0]!}
               onSetChange={handleEditCurrentSet}
