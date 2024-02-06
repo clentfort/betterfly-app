@@ -1,18 +1,19 @@
 import { Icon, Input } from "@ui-kitten/components";
 import React from "react";
-import { TouchableWithoutFeedback } from "react-native";
+import { ImageProps, TouchableWithoutFeedback } from "react-native";
 
-interface SecureEntryToggleProps {
+interface SecureEntryToggleProps extends ImageProps {
   isSecureEntryOn: boolean;
   onToggleSecureEntry: () => void;
 }
 function SecureEntryToggle({
   isSecureEntryOn,
   onToggleSecureEntry,
+  ...props
 }: SecureEntryToggleProps): React.ReactElement {
   return (
     <TouchableWithoutFeedback onPress={onToggleSecureEntry}>
-      <Icon name={isSecureEntryOn ? "eye-off" : "eye"} />
+      <Icon {...props} name={isSecureEntryOn ? "eye-off" : "eye"} />
     </TouchableWithoutFeedback>
   );
 }
@@ -36,6 +37,7 @@ export default function PasswordInput(
       {...props}
       accessoryRight={(props) => (
         <SecureEntryToggle
+          {...props}
           isSecureEntryOn={secureTextEntry}
           onToggleSecureEntry={toggleSecureEntry}
         />

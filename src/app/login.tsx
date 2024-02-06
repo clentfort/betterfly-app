@@ -25,23 +25,26 @@ export default function HomeScreen(): React.ReactElement {
     >
       <Text category="h1">Betterfly Member App</Text>
       <Input
+        defaultValue={studioId}
+        importantForAutofill="yes"
         keyboardType="numeric"
         label="Studio ID"
-        defaultValue={studioId}
         onChangeText={setStudioId}
       />
       <Input
         autoComplete="email"
-        label="E-Mail"
-        keyboardType="email-address"
-        textContentType="emailAddress"
         defaultValue={username}
+        importantForAutofill="yes"
+        keyboardType="email-address"
+        label="E-Mail"
+        textContentType="emailAddress"
         onChangeText={setUsername}
       />
       <PasswordInput
         autoComplete="password"
-        label="Password"
         defaultValue={password}
+        importantForAutofill="yes"
+        label="Password"
         onChangeText={setPassword}
       />
       <Button
