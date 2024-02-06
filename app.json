@@ -6,7 +6,6 @@
     "name": "Betterfly App",
     "slug": "betterfly-app",
     "scheme": "betterfly",
-    "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
@@ -42,6 +41,7 @@
       }
     },
     "plugins": ["expo-secure-store", "expo-router"],
-    "owner": "clentfort"
+    "owner": "clentfort",
+    "version": "1.4.0"
   }
 }
