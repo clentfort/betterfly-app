@@ -29,6 +29,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Type Check
+        run: npm run ts:check
+
       - name: Prebuild
         run: npm exec expo -- prebuild --platform android
 
