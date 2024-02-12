@@ -166,7 +166,7 @@ export default function ExercisePlanScreen() {
 
   const handleFinishSet = async () => {
     if (planItem.openSets.length > 0) {
-      const currentSetIndex = planItem.currentSetIndex ?? 0 + 1;
+      const currentSetIndex = (planItem.currentSetIndex ?? 0) + 1;
       const [finishedSet, ...openSets] = planItem.openSets;
       const finishedSets = [...planItem.finishedSets, finishedSet!];
       const history = upsertSetsInHistory(
@@ -224,7 +224,7 @@ export default function ExercisePlanScreen() {
     const sets = [...planItem.sets];
     sets[planItem.currentSetIndex ?? 0] = set;
 
-    const currentSetIndex = planItem.currentSetIndex ?? 0 + 1;
+    const currentSetIndex = (planItem.currentSetIndex ?? 0) + 1;
     const [, ...openSets] = planItem.openSets;
     const finishedSets = [...planItem.finishedSets, set];
     const history = upsertSetsInHistory(
